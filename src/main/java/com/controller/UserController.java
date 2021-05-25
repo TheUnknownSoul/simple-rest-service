@@ -2,21 +2,21 @@ package com.controller;
 
 
 import com.entity.User;
+import com.exception.NoSuchUserException;
 import com.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/users",consumes = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/users")
 public class UserController {
 
     @Autowired
     UserServiceImpl service;
 
-    @GetMapping("/allUsers")
+    @GetMapping
     public List<User> showAllUsers() {
         return service.showAllUsers();
     }
@@ -25,14 +25,14 @@ public class UserController {
     public User getUserById(@PathVariable Long id) {
         return service.getUserById(id);
     }
-
+    //return user
     @PostMapping
     public void save(@RequestBody User user) {
         service.save(user);
     }
 
     @PutMapping
-    public User putUpdate(@RequestBody User user) {
+    public User putUpdate(@RequestBody User user) throws NoSuchUserException {
         return service.putUpdate(user);
     }
 
@@ -45,4 +45,6 @@ public class UserController {
     public void delete(@PathVariable Long id) {
         service.deleteById(id);
     }
+
+
 }

@@ -1,7 +1,9 @@
 package com.service;
 
 import com.entity.User;
+import com.exception.NoSuchUserException;
 import com.repository.UserRepository;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -33,21 +35,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User putUpdate(User user) {
-        getUserById(user.getId());
-        return repository.save(user);
+    public User putUpdate(User user) throws NoSuchUserException {
+        if (repository.existsById(user.getId())) {
+            return repository.save(user);
+        }
+        throw new NoSuchUserException("No such user");
     }
+
 
     @Override
     public User patchUpdate(User user) {
-        User user1 = getUserById(user.getId());
-        if (user.getFirstName() != null && !user.getFirstName().equals("")) {
-            user1.setFirstName(user.getFirstName());
+        User userFromDb = getUserById(user.getId());
+        if (StringUtils.isBlank(user.getFirstName())) {
+            userFromDb.setFirstName(user.getFirstName());
         }
-        if (user.getLastName() != null && !user.getLastName().equals("")) {
-            user1.setLastName(user.getLastName());
+        if (StringUtils.isBlank(user.getLastName())) {
+            userFromDb.setLastName(user.getLastName());
         }
-        return repository.save(user1);
+        return repository.save(userFromDb);
     }
 
     @Override
