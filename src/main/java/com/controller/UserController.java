@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -25,10 +26,10 @@ public class UserController {
     public User getUserById(@PathVariable Long id) {
         return service.getUserById(id);
     }
-    //return user
+
     @PostMapping
-    public void save(@RequestBody User user) {
-        service.save(user);
+    public Optional<User> save(@RequestBody User user) {
+       return service.save(user);
     }
 
     @PutMapping
@@ -45,6 +46,5 @@ public class UserController {
     public void delete(@PathVariable Long id) {
         service.deleteById(id);
     }
-
 
 }

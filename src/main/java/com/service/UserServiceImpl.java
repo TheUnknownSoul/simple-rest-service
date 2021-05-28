@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -18,10 +19,11 @@ public class UserServiceImpl implements UserService {
     @Autowired
     UserRepository repository;
 
-
     @Override
-    public void save(User user) {
-        repository.save(user);
+    public Optional<User> save(User user) {
+
+        repository.saveAndFlush(user);
+        return repository.findById(user.getId());
     }
 
     @Override
@@ -42,14 +44,13 @@ public class UserServiceImpl implements UserService {
         throw new NoSuchUserException("No such user");
     }
 
-
     @Override
     public User patchUpdate(User user) {
         User userFromDb = getUserById(user.getId());
-        if (StringUtils.isBlank(user.getFirstName())) {
+        if (!StringUtils.isBlank(user.getFirstName())) {
             userFromDb.setFirstName(user.getFirstName());
         }
-        if (StringUtils.isBlank(user.getLastName())) {
+        if (!StringUtils.isBlank(user.getLastName())) {
             userFromDb.setLastName(user.getLastName());
         }
         return repository.save(userFromDb);
