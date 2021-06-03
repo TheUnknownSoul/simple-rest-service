@@ -1,16 +1,17 @@
 package com.service;
 
+import com.dto.UserDto;
 import com.entity.User;
 import com.exception.NoSuchUserException;
 import com.repository.UserRepository;
 import org.apache.commons.lang3.StringUtils;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
 
 @Service
@@ -19,11 +20,14 @@ public class UserServiceImpl implements UserService {
     @Autowired
     UserRepository repository;
 
-    @Override
-    public Optional<User> save(User user) {
+    @Autowired
+    ModelMapper modelMapper;
 
+    @Override
+    public User save(UserDto userDto) {
+        User user = modelMapper.map(userDto, User.class);
         repository.saveAndFlush(user);
-        return repository.findById(user.getId());
+        return repository.findUserById(user.getId());
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.controller;
 
 
+import com.dto.UserDto;
 import com.entity.User;
 import com.exception.NoSuchUserException;
 import com.service.UserServiceImpl;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -36,8 +36,8 @@ public class UserController {
     }
 
     @PostMapping
-    public Optional<User> save(@RequestBody User user) {
-        return service.save(user);
+    public User save(@RequestBody UserDto userDto) {
+        return service.save(userDto);
     }
 
     @PutMapping
