@@ -26,8 +26,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User save(UserDto userDto) {
         User user = modelMapper.map(userDto, User.class);
-        repository.saveAndFlush(user);
-        return repository.findUserById(user.getId());
+        return repository.saveAndFlush(user);
     }
 
     @Override
